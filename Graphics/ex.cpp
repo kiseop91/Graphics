@@ -24,7 +24,7 @@ void d()
 void polygon()
 {
 	//glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(1,1,1,1);
+	glClearColor(1, 1, 1, 1);
 	glColor3f(0.5, 0.4, 0.3);
 
 	glBegin(GL_POLYGON);
@@ -37,17 +37,53 @@ void polygon()
 	glFlush();
 }
 
+void vertexArrayModeling()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	//glClearColor(1, 1, 1, 1);
+	GLfloat MyVertices[8][3] = { {-0.25,-0.25,0.25},{-0.25,0.25, 0.25}, {0.25,0.25,0.25},
+								{0.25,-0.25,0.25},{-0.25,-0.25, -0.25}, {-0.25,0.25,-0.25},
+								{0.25,0.25,-0.25},{0.25,-0.25, -0.25} };
+	GLfloat MyColors[8][3] = { {0.2,0.2,0.2},{1.0,0.0,0.0},{1.0,1.0,0.2},{0.0,1.0,0.0},
+							   {0.0,0.0,1.0} ,{1.0,0.0,1.0} ,{1.0,1.0,1.0} ,{0.0,1.0,1.0} };
+
+	GLubyte MyVertexList[24] = { 0,3,2,1, 2,3,7,6, 0,4,7,3, 1,2,6,5, 4,5,6,7, 0,1,5,4 };
+
+
+	glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColorPointer(3, GL_FLOAT, 0, MyColors);
+	glVertexPointer(3, GL_FLOAT, 0, MyVertices);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glRotatef(30.0, 1.0, 1.0, 1.0);
+	for (GLint i = 0; i < 6; i++)
+		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_BYTE, &MyVertexList[4 * i]);
+
+	glFlush();
+}
+
+void Mylnit()
+{
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-0.1, 1.0, -1.0, 1.0, -1.0, 1.0);
+}
+
+
 int main(int arg, char **argv)
 {
 	glutInit(&arg, argv);
-
-	int width, hieght;
-	width = 600;
-	hieght = 600;
-	glutInitWindowSize(width, hieght);
-
+	glutInitDisplayMode(GLUT_RGB);
+	glutInitWindowSize(600, 600);
+	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Hello World!!!");
-	glutDisplayFunc(polygon);
+	//Mylnit();
+	glutDisplayFunc(vertexArrayModeling);
 
 
 	glutMainLoop();
